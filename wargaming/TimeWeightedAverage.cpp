@@ -41,6 +41,9 @@ namespace wargaming {
 	}
 
 	void TimeWeightedAverage::Insert(const Order& o) {
+		if (o.price == 0) return;
+		if (o.price < 0) throw runtime_error{ "TimeWeightedAverage::Insert(): price < 0" };
+
 		if (orders.IsEmpty()) {
 			orders.Insert(o);
 			s.current = o.when;

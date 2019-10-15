@@ -21,7 +21,7 @@ namespace wargaming {
 	class Stats {
 	public:
 		void Update(const Order& o, double price);
-		double GetResult() const { return result / sum; }
+		double GetResult() const { return (result == 0) ? 0 : result/sum; }
 
 		long long sum{ 0 };
 		double result{ 0 };

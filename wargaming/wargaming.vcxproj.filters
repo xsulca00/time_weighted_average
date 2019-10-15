@@ -19,7 +19,7 @@
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
     <ClCompile Include="TimeWeightedAverage.cpp">
-      <Filter>Hlavičkové soubory</Filter>
+      <Filter>Zdrojové soubory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
