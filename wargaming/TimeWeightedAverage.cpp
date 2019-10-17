@@ -33,11 +33,11 @@ namespace wargaming {
 		return it->second;
 	}
 
-	void Stats::Update(const Order& o, double price) {
-		auto dur{ (o.when - current).count() };
+	void Stats::Update(utils::TimePointMs tp, double price) {
+		auto dur{ tp - current };
 		sum += dur;
-		result += dur * price;
-		current = o.when;
+		result += dur.count() * price;
+		current = tp;
 	}
 
 	void TimeWeightedAverage::Insert(const Order& o) {
@@ -45,38 +45,27 @@ namespace wargaming {
 		if (o.price < 0) throw runtime_error{ "TimeWeightedAverage::Insert(): price < 0" };
 
 		if (orders.IsEmpty()) {
-			orders.Insert(o);
 			s.current = o.when;
-			cout << "Order: " << o << '\n';
-			cout << "I Current: " << s.current << '\n';
-			cout << "I Sum: " << s.sum << '\n';
 		}
-		else {
-			if (orders.GetCurrentMaxPrice() < o.price) {
-				s.Update(o, orders.GetCurrentMaxPrice());
-			}
-
-			orders.Insert(o);
-
-			cout << "Order: " << o << '\n';
-			cout << "I Current: " << s.current << '\n';
-			cout << "I Sum: " << s.sum << '\n';
+		else if (double pMax{ orders.GetCurrentMaxPrice() };  pMax < o.price) {
+			s.Update(o.when, pMax);
 		}
+
+		orders.Insert(o);
+
+		cout << "Order: " << o << '\n';
+		cout << "I Current: " << s.current << '\n';
+		cout << "I Sum: " << s.sum << '\n';
 	}
 
 	void TimeWeightedAverage::Erase(const Order& o) {
-		Order order{ orders.GetOrder(o.id) };
+		double price { orders.GetOrder(o.id).price };
 		orders.Erase(o.id);
 
 		cout << "Erasing: " << o << '\n';
 
-		if (orders.IsEmpty()) {
-			s.Update(o, order.price);
-			cout << "E Current: " << s.current << '\n';
-			cout << "E Sum: " << s.sum << '\n';
-		}
-		else if (order.price > orders.GetCurrentMaxPrice()) {
-			s.Update(o, order.price);
+		if (orders.IsEmpty() || price > orders.GetCurrentMaxPrice()) {
+			s.Update(o.when, price);
 			cout << "E Current: " << s.current << '\n';
 			cout << "E Sum: " << s.sum << '\n';
 		}

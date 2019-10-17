@@ -1,11 +1,13 @@
 #pragma once
 
 #include <map>
+#include <chrono>
 #include "Utils.h"
 #include "Order.h"
 
 namespace wargaming {
 	using namespace std;
+	using namespace std::chrono;
 
 	class OrderBook {
 	public:
@@ -20,10 +22,10 @@ namespace wargaming {
 
 	class Stats {
 	public:
-		void Update(const Order& o, double price);
-		double GetResult() const { return (result == 0) ? 0 : result/sum; }
+		void Update(utils::TimePointMs tp, double price);
+		double GetResult() const { return (result == 0) ? 0 : result/sum.count(); }
 
-		long long sum{ 0 };
+		milliseconds sum{ 0 };
 		double result{ 0 };
 		utils::TimePointMs current;
 	};
@@ -38,6 +40,6 @@ namespace wargaming {
 		OrderBook orders;
 	};
 
-	void ReadOrdersAndStore(ifstream& file, wargaming::TimeWeightedAverage& avg);
+	void ReadOrdersAndStore(ifstream& file, TimeWeightedAverage& avg);
 
 }

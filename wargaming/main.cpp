@@ -8,6 +8,7 @@
 
 int main(int argc, char* argv[]) {
 	using namespace std;
+	using namespace std::chrono;
 
 	try {
 		if (argc != 2) throw runtime_error{ "Usage: "s + argv[0] + " input_file_name" };
