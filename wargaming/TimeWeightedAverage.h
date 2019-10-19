@@ -31,7 +31,9 @@ namespace wargaming {
 	};
 
 	// Calculates time-weighted average highest price of orders.
-	// Average is calculated incrementally
+	// Average is calculated incrementally and depends on order insert and its erase.
+	// First an order must be inserted and then must be erased with dependence:
+	// order insertion timepoint < order erasure timepoint
 	class TimeWeightedAverage {
 	public:
 		// Order to insert contains timestamp, id and price

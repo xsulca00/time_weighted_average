@@ -14,7 +14,7 @@ namespace wargaming {
 
 		utils::TimePointMs timepoint;
 		int id{ -1 };
-		// iterator into max prices cache for faster erase
+		// Iterator into max prices cache for faster erase
 		multiset<double>::iterator priceIt;
 	};
 
