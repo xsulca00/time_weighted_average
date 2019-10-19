@@ -1,20 +1,21 @@
 #pragma once
 
 #include <ostream>
+#include <set>
 #include "Utils.h"
 
 namespace wargaming {
-	using std::ostream;
+	using namespace std;
 
+	// Stores important information about order
 	struct Order {
-		utils::TimePointMs when;
-		bool  insert{ false };
-		int id{ -1 };
-		double price{ 0 };
-	};
+		Order(utils::TimePointMs tp, int iid, multiset<double>::iterator it)
+			: timepoint{ tp }, id{ iid }, priceIt{ it } {}
 
-	inline ostream& operator<<(ostream& os, const Order& o) {
-		return os << "{ " << o.when << ' ' << o.insert << ' ' << o.id << ' ' << o.price << " }";
-	}
+		utils::TimePointMs timepoint;
+		int id{ -1 };
+		// iterator into max prices cache for faster erase
+		multiset<double>::iterator priceIt;
+	};
 
 }

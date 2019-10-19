@@ -21,9 +21,7 @@ int main(int argc, char* argv[]) {
 		wargaming::TimeWeightedAverage average;
 		wargaming::ReadOrdersAndStore(file, average);
 
-		cout << "Result: " << average.GetStats().result << '\n';
-		cout << "Sum: " << average.GetStats().sum << '\n';
-		cout << average.GetStats().GetResult() << '\n';
+		cout << "Time-weighted average: " << average.GetAverage() << '\n';
 	}
 	catch (const exception & e) {
 		cerr << "std::exception caught: " << e.what() << '\n';

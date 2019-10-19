@@ -6,7 +6,8 @@
 namespace wargaming::utils {
 	using namespace std::chrono;
 
-	using TimePointMs = time_point<system_clock, milliseconds>;	
+	// Steady clock is suitable for difference between timepoints
+	using TimePointMs = time_point<steady_clock, milliseconds>;	
 }
 
 namespace std::chrono {
@@ -22,16 +23,16 @@ namespace std::chrono {
 		return os << m.count() << " ms";
 	}
 
-	using wargaming::utils::TimePointMs;
-
-	inline istream& operator>>(istream& is, TimePointMs& tp) {
+	// Input from stream (file, string...)
+	inline istream& operator>>(istream& is, wargaming::utils::TimePointMs& tp) {
 		milliseconds m{ 0 };
 		is >> m;
-		tp = TimePointMs{ m };
+		tp = wargaming::utils::TimePointMs{ m };
 		return is;
 	}
 
-	inline ostream& operator<<(ostream& os, TimePointMs tp) {
+	// Output to stream (file, string...)
+	inline ostream& operator<<(ostream& os, wargaming::utils::TimePointMs tp) {
 		return os << tp.time_since_epoch();
 	}
 

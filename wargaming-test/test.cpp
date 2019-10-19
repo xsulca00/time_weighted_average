@@ -11,10 +11,7 @@ TEST(BasicTest, BasicTest) {
 	wargaming::TimeWeightedAverage average;
 	wargaming::ReadOrdersAndStore(file, average);
 
-	cout << "Result: " << average.GetStats().result << '\n';
-	cout << "Sum: " << average.GetStats().sum << '\n';
-
-	EXPECT_DOUBLE_EQ(average.GetStats().GetResult(), 10.5);
+	EXPECT_DOUBLE_EQ(average.GetAverage(), 10.5);
 }
 
 TEST(BasicTest, InsertEraseOne) {
@@ -28,10 +25,7 @@ TEST(BasicTest, InsertEraseOne) {
 	wargaming::TimeWeightedAverage average;
 	wargaming::ReadOrdersAndStore(file, average);
 
-	cout << "Result: " << average.GetStats().result << '\n';
-	cout << "Sum: " << average.GetStats().sum << '\n';
-
-	EXPECT_DOUBLE_EQ(average.GetStats().GetResult(), 13.0);
+	EXPECT_DOUBLE_EQ(average.GetAverage(), 13.0);
 }
 
 TEST(BasicTest, EmptyIntervalsBetweenOrders) {
@@ -45,10 +39,7 @@ TEST(BasicTest, EmptyIntervalsBetweenOrders) {
 	wargaming::TimeWeightedAverage average;
 	wargaming::ReadOrdersAndStore(file, average);
 
-	cout << "Result: " << average.GetStats().result << '\n';
-	cout << "Sum: " << average.GetStats().sum << '\n';
-
-	EXPECT_DOUBLE_EQ(average.GetStats().GetResult(), 14.0);
+	EXPECT_DOUBLE_EQ(average.GetAverage(), 14.0);
 }
 
 TEST(BasicTest, MultipleSamePrice) {
@@ -62,10 +53,7 @@ TEST(BasicTest, MultipleSamePrice) {
 	wargaming::TimeWeightedAverage average;
 	wargaming::ReadOrdersAndStore(file, average);
 
-	cout << "Result: " << average.GetStats().result << '\n';
-	cout << "Sum: " << average.GetStats().sum << '\n';
-
-	EXPECT_DOUBLE_EQ(average.GetStats().GetResult(), 13.0);
+	EXPECT_DOUBLE_EQ(average.GetAverage(), 13.0);
 }
 
 TEST(BasicTest, EmptyOrders) {
@@ -79,9 +67,37 @@ TEST(BasicTest, EmptyOrders) {
 	wargaming::TimeWeightedAverage average;
 	wargaming::ReadOrdersAndStore(file, average);
 
-	cout << "Result: " << average.GetStats().result << '\n';
-	cout << "Sum: " << average.GetStats().sum << '\n';
-
-	EXPECT_DOUBLE_EQ(average.GetStats().GetResult(), 0.0);
+	EXPECT_DOUBLE_EQ(average.GetAverage(), 0.0);
 }
+
+TEST(BasicTest, MonotonicMaxPrice) {
+	using namespace std;
+
+	const string pathToFile{ "../wargaming/test_inputs/monotonic_max_price.txt" };
+
+	ifstream file{ pathToFile };
+	if (!file) throw runtime_error{ "Cannot open file: \"" + pathToFile + "\"" };
+
+	wargaming::TimeWeightedAverage average;
+	wargaming::ReadOrdersAndStore(file, average);
+
+	constexpr double shouldBe{ (1000*10 + 200*15 + 1800*17) / (1000.0 + 200 + 1800) };
+
+	EXPECT_DOUBLE_EQ(average.GetAverage(), shouldBe);
+}
+
+TEST(BasicTest, OneHighestPrice) {
+	using namespace std;
+
+	const string pathToFile{ "../wargaming/test_inputs/one_highest.txt" };
+
+	ifstream file{ pathToFile };
+	if (!file) throw runtime_error{ "Cannot open file: \"" + pathToFile + "\"" };
+
+	wargaming::TimeWeightedAverage average;
+	wargaming::ReadOrdersAndStore(file, average);
+
+	EXPECT_DOUBLE_EQ(average.GetAverage(), 20.0);
+}
+
 
