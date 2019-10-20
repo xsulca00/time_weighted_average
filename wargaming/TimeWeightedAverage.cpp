@@ -55,10 +55,6 @@ namespace wargaming {
 		}
 
 		orders.Insert(when, id, price);
-
-		cout << "I Current: " << current << '\n';
-		cout << "I Result: " << result << '\n';
-		cout << "I Sum: " << sum << '\n';
 	}
 
 	double TimeWeightedAverage::EraseOrder(int id) {
@@ -75,9 +71,6 @@ namespace wargaming {
 		// contained highest price
 		if (orders.IsEmpty() || price > orders.GetCurrentMaxPrice()) {
 			Update(when, price);
-			cout << "E Current: " << current << '\n';
-			cout << "E Result: " << result << '\n';
-			cout << "E Sum: " << sum << '\n';
 		}
 	}
 
